@@ -42,8 +42,13 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
     const client = getClient(ctx.currentUserAccessToken as string)
 
     client.roles.list().then((roles) => {
-      const rls = roles.map(r => ({ id: r.id, name: r.name, hidden: false, disabled: false })) as Role[]
-      rls.unshift(ownerRole)
+      console.log(roles);
+      
+      const rls = roles
+        .map(r => ({ id: r.id, name: r.name, hidden: false, disabled: false }))
+        .sort((a, b) => a.name > b.name ? 1 : -1) as Role[]
+
+      rls.push(ownerRole)
 
       const rlsValues: RoleMap = {}
       rls.forEach(r => rlsValues[r.id] = r)
@@ -66,26 +71,20 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
   if(!isReady)
     return <Canvas ctx={ctx}><Spinner/></Canvas>
 
+  const allHidden = Object.keys(rolesValues).filter((k) => rolesValues[k].hidden).length === Object.keys(rolesValues).length
+  const allDisabled = Object.keys(rolesValues).filter((k) => rolesValues[k].disabled).length === Object.keys(rolesValues).length
+
   return (
     <Canvas ctx={ctx}>
       <table className={styles.settings}>
         <tr>
           <th>Role</th>
-          <th>Hidden</th>
           <th>Disabled</th>
+          <th>Hidden</th>
         </tr>
-        {roles?.map((role) =>
+        {roles?.map((role, idx) =>
           <tr>
             <td>{role.name}</td>
-            <td>
-              <SwitchField
-                id={`hidden-${role.id}`}
-                name={`hidden-${role.id}`}
-                label={''}
-                value={rolesValues ? rolesValues[role.id].hidden : false}
-                onChange={(hidden) => setRolesValues({ ...rolesValues, [role.id]: { ...rolesValues[role.id], hidden } })}
-              />
-            </td>
             <td>
               <SwitchField
                 id={`disabled-${role.id}`}
@@ -95,8 +94,46 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
                 onChange={(disabled) => setRolesValues({ ...rolesValues, [role.id]: { ...rolesValues[role.id], disabled } })}
               />
             </td>
+            <td>
+              <SwitchField
+                id={`hidden-${role.id}`}
+                name={`hidden-${role.id}`}
+                label={''}
+                value={rolesValues ? rolesValues[role.id].hidden : false}
+                onChange={(hidden) => setRolesValues({ ...rolesValues, [role.id]: { ...rolesValues[role.id], hidden } })}
+              />
+            </td>
           </tr>
         )}
+        <tr>
+          <td>All</td>
+          <td>
+            <SwitchField
+              id={`disabled-all`}
+              name={`disabled-all`}
+              label={''}
+              value={allDisabled}
+              onChange={(disabled) => {
+                const rValues = {...rolesValues}
+                Object.keys(rValues).forEach(k => rValues[k] = {...rValues[k], disabled })
+                setRolesValues(rValues)
+              }}
+            />
+          </td>
+          <td>
+            <SwitchField
+              id={`hidden-all`}
+              name={`hidden-all`}
+              label={''}
+              value={allHidden}
+              onChange={(hidden) => {
+                const rValues = {...rolesValues}
+                Object.keys(rValues).forEach(k => rValues[k] = {...rValues[k], hidden })
+                setRolesValues(rValues)
+              }}
+            />
+          </td>
+        </tr>
       </table>
     </Canvas>
   );

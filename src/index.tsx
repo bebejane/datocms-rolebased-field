@@ -22,7 +22,7 @@ connect({
     return [
       {
         id: 'rolesBasedField',
-        name: `Role Based Field ${isDev ? ' (dev)' : ''}`,
+        name: `Role-based Field ${isDev ? ' (dev)' : ''}`,
         type: 'addon',
         fieldTypes: 'all',
         configurable: true

@@ -1,5 +1,6 @@
 .settings{
   font-size: var(--font-size-s);
+  width: 100%;
   padding:0;
   tr{
     td, th{
@@ -7,9 +8,22 @@
       padding-bottom: var(--spacing-s);
       padding-right: var(--spacing-l);
       padding-left: 0;
+      &:last-child{
+        width: 100%;
+      }
     }
     th{
       color:var(--light-body-color);
+    }
+    &:last-child{
+      td{
+        padding-top: var(--spacing-s);
+        border-top: 1px solid var(--border-color);
+        &:first-child{
+          color:var(--light-body-color);
+          font-weight: bold;
+        }
+      }
     }
   }
 }
