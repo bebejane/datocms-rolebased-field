@@ -1,0 +1,19 @@
+.settings{
+  font-size: var(--font-size-s);
+  padding:0;
+  tr{
+    td, th{
+      text-align: left;
+      padding-bottom: var(--spacing-s);
+      padding-right: var(--spacing-l);
+      padding-left: 0;
+    }
+    th{
+      color:var(--light-body-color);
+    }
+  }
+}
+
+.error{
+  color: var(--alert-color);
+}
