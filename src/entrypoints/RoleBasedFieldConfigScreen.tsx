@@ -19,11 +19,11 @@ type RoleMap = {
   [key: string]: Role
 }
 
-const ownerRole : Role = {
-  id:'account_role',
+const ownerRole: Role = {
+  id: 'account_role',
   name: 'Owner',
-  hidden:false,
-  disabled:false,
+  hidden: false,
+  disabled: false,
 }
 
 export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
@@ -33,17 +33,16 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
   const [rolesValues, setRolesValues] = useState<RoleMap | undefined>()
 
   useEffect(() => {
-    
-    if(!ctx.currentUserAccessToken) 
+
+    if (!ctx.currentUserAccessToken)
       return setError('Access token missing!')
-    
+
     setError(undefined)
-    
+
     const client = getClient(ctx.currentUserAccessToken as string)
 
     client.roles.list().then((roles) => {
-      console.log(roles);
-      
+
       const rls = roles
         .map(r => ({ id: r.id, name: r.name, hidden: false, disabled: false }))
         .sort((a, b) => a.name > b.name ? 1 : -1) as Role[]
@@ -54,7 +53,7 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
       rls.forEach(r => rlsValues[r.id] = r)
       setRoles(rls)
       setRolesValues(Object.keys(ctx.parameters).length ? ctx.parameters as RoleMap : rlsValues)
-    }).catch((err)=> setError(err.message))
+    }).catch((err) => setError(err.message))
 
   }, [ctx.parameters, ctx.currentUserAccessToken, setRoles, setRolesValues, setError])
 
@@ -62,14 +61,14 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
     if (typeof rolesValues === 'undefined') return
     ctx.setParameters(rolesValues).then(() => console.log('saved settings'))
   }, [rolesValues, ctx])
-  
+
   const isReady = typeof rolesValues !== 'undefined' && typeof roles !== 'undefined';
 
-  if(error)
+  if (error)
     return <Canvas ctx={ctx}><div className={styles.error}>{error}</div></Canvas>
-  
-  if(!isReady)
-    return <Canvas ctx={ctx}><Spinner/></Canvas>
+
+  if (!isReady)
+    return <Canvas ctx={ctx}><Spinner /></Canvas>
 
   const allHidden = Object.keys(rolesValues).filter((k) => rolesValues[k].hidden).length === Object.keys(rolesValues).length
   const allDisabled = Object.keys(rolesValues).filter((k) => rolesValues[k].disabled).length === Object.keys(rolesValues).length
@@ -114,8 +113,8 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
               label={''}
               value={allDisabled}
               onChange={(disabled) => {
-                const rValues = {...rolesValues}
-                Object.keys(rValues).forEach(k => rValues[k] = {...rValues[k], disabled })
+                const rValues = { ...rolesValues }
+                Object.keys(rValues).forEach(k => rValues[k] = { ...rValues[k], disabled })
                 setRolesValues(rValues)
               }}
             />
@@ -127,8 +126,8 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
               label={''}
               value={allHidden}
               onChange={(hidden) => {
-                const rValues = {...rolesValues}
-                Object.keys(rValues).forEach(k => rValues[k] = {...rValues[k], hidden })
+                const rValues = { ...rolesValues }
+                Object.keys(rValues).forEach(k => rValues[k] = { ...rValues[k], hidden })
                 setRolesValues(rValues)
               }}
             />
