@@ -1,8 +1,8 @@
 import 'datocms-react-ui/styles.css';
-import { 
-  connect, 
-  IntentCtx, 
-  RenderManualFieldExtensionConfigScreenCtx, 
+import {
+  connect,
+  IntentCtx,
+  RenderManualFieldExtensionConfigScreenCtx,
   RenderFieldExtensionCtx,
 } from 'datocms-plugin-sdk';
 
@@ -30,14 +30,15 @@ connect({
     ];
   },
   renderFieldExtension(fieldExtensionId: string, ctx: RenderFieldExtensionCtx) {
-    console.log(ctx.parameters,ctx.currentRole.id);
-    
-    if(typeof ctx.parameters[ctx.currentRole.id] === 'object'){
+
+    if (typeof ctx.parameters[ctx.currentRole.id] === 'object') {
       const config = ctx.parameters[ctx.currentRole.id] as any
+      console.log(ctx.fieldPath);
+
       ctx.toggleField(ctx.fieldPath, config.hidden ? false : true)
-      ctx.disableField(ctx.fieldPath, config.disabled ? true: false)
+      ctx.disableField(ctx.fieldPath, config.disabled ? true : false)
     }
-    
+
     return null
   },
   renderManualFieldExtensionConfigScreen(fieldExtensionId: string, ctx: RenderManualFieldExtensionConfigScreenCtx) {
@@ -50,7 +51,7 @@ connect({
   },
   validateManualFieldExtensionParameters(fieldExtensionId: string, parameters: Record<string, any>) {
     const errors: Record<string, string> = {};
-    
+
     return errors;
   },
 });
