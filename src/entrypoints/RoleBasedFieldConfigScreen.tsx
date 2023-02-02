@@ -59,7 +59,7 @@ export default function RoleBasedFieldConfigScreen({ ctx }: PropTypes) {
 
   useEffect(() => {
     if (typeof rolesValues === 'undefined') return
-    ctx.setParameters(rolesValues).then(() => console.log('saved settings'))
+    ctx.setParameters(rolesValues).then(() => { })
   }, [rolesValues, ctx])
 
   const isReady = typeof rolesValues !== 'undefined' && typeof roles !== 'undefined';

@@ -33,8 +33,6 @@ connect({
 
     if (typeof ctx.parameters[ctx.currentRole.id] === 'object') {
       const config = ctx.parameters[ctx.currentRole.id] as any
-      console.log(ctx.fieldPath);
-
       ctx.toggleField(ctx.fieldPath, config.hidden ? false : true)
       ctx.disableField(ctx.fieldPath, config.disabled ? true : false)
     }
